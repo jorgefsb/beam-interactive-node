@@ -24,7 +24,7 @@ describe('proto', () => {
         }
 
 
-        it('reads correctly', (done) => {
+        it('decodes correctly', (done) => {
             const num = 50;
             const bytes = [];
             for (let i = 0; i < num; i++) {
@@ -34,25 +34,25 @@ describe('proto', () => {
                 bytes.push(encoded);
             }
 
-            const reader = new Stream.Reader().on('error', console.error);
+            const decoder = new Stream.Decoder().on('error', console.error);
             let count = 0;
-            reader.on('message', (msg) => {
+            decoder.on('message', (msg) => {
                 expect(msg.message).to.equal('asdf' + (count++));
                 if (count === num - 1) done();
             });
 
-            reluctantReader(Buffer.concat(bytes)).pipe(reader);
+            reluctantReader(Buffer.concat(bytes)).pipe(decoder);
         });
 
         it('goes both ways ͡° ͜ʖ ͡°', (done) => {
-            const reader = new Stream.Reader().on('error', console.error);
-            const writer = new Stream.Writer().on('error', console.error);
+            const decoder = new Stream.Decoder().on('error', console.error);
+            const writer = new Stream.Encoder().on('error', console.error);
             const num = 50;
 
-            writer.pipe(reader);
+            writer.pipe(decoder);
 
             let count = 0;
-            reader.on('message', (msg) => {
+            decoder.on('message', (msg) => {
                 expect(msg.message).to.equal('asdf' + (count++));
                 if (count === num - 1) done();
             });

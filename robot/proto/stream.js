@@ -26,11 +26,11 @@ const idList = [
 idList.forEach((l) => assert(l.obj !== undefined));
 
 /**
- * A ReaderError is thrown when some invalid information is given
- * to the reader. When thrown, all data in the buffer will be
+ * A DecodeError is thrown when some invalid information is given
+ * to the decoder. When thrown, all data in the buffer will be
  * discarded.
  */
-export class ReaderError extends Error {
+export class DecodeError extends Error {
     constructor (e) {
         super(e.message);
         this.inner = e;
@@ -38,19 +38,19 @@ export class ReaderError extends Error {
 }
 
 /**
- * Reader transforms a stream of protocol buffers (created with
+ * Decoder transforms a stream of protocol buffers (created with
  * some Writer) into Javascript objects.
  *
  * @example
- * const reader = new Reader(packet);
- * reader.on('message', function (packet) {
+ * const decoder = new Decoder(packet);
+ * decoder.on('message', function (packet) {
  *     console.log(packet);
  * });
- * mystream.pipe(reader);
+ * mystream.pipe(decoder);
  */
-export class Reader extends Writable {
+export class Decoder extends Writable {
     /**
-     * Creates a new stream reader; it's used to consume a stream of
+     * Creates a new stream decoder; it's used to consume a stream of
      * data, and emits messages which are decoded protobuf objects.
      */
     constructor () {
@@ -88,7 +88,7 @@ export class Reader extends Writable {
         // doesn't exist and, if it does, send out a message.
         const ident = idList.find((l) => l.id === packet);
         if (ident === undefined) {
-            this.emit('error', new ReaderError(
+            this.emit('error', new DecodeError(
                 'Unknown packet ID ' + packet + ' (' + length + ' bytes)'));
             // Return the number of bytes so we don't get stuck on the bad packet.
             return bytes;
@@ -97,7 +97,7 @@ export class Reader extends Writable {
         try {
             this.emit('message', ident.obj.decode(buffer.slice(bytes - length, bytes)));
         } catch (e) {
-            this.emit('error', e.decoded ? new ReaderError(e) : e);
+            this.emit('error', e.decoded ? new DecodeError(e) : e);
         }
 
         return bytes;
@@ -121,20 +121,20 @@ export class Reader extends Writable {
 }
 
 /**
- * Writer is used to transform protocol buffers into a stream.
+ * Encoder is used to transform protocol buffers into a stream.
  *
  * @example
- * const writer = new Writer(packet);
- * writer.pipe(myStream);
+ * const encoder = new Encoder(packet);
+ * encoder.pipe(myStream);
  *
- * writer.push(someObj);
+ * encoder.push(someObj);
  */
-export class Writer extends Readable {
+export class Encoder extends Readable {
     /**
      * Encodes a plain object to a protocol buffer and pushes
      * it onto the stream.
      * @param  {Object} packet
-     * @return {Writer}
+     * @return {Encoder}
      */
     push (packet) {
         const ident = idList.find((l) => packet instanceof l.obj);
@@ -148,7 +148,7 @@ export class Writer extends Readable {
     }
 
     /**
-     * Closes the writer.
+     * Closes the encoder.
      */
     close () {
         super.push(null);
