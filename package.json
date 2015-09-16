@@ -1,0 +1,42 @@
+{
+  "name": "tetris-reference",
+  "version": "1.0.0",
+  "description": "This repository contains reference a implementation of a Tetris robot.",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint robot",
+    "build": "rm -rf dist && babel robot --out-dir dist",
+    "test": "mocha test --recursive --compilers js:babel/register && npm run lint",
+    "prepublish": "npm run lint && npm run build",
+    "cover": "node node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- test --recursive --compilers js:babel/register"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WatchBeam/tetris-reference.git"
+  },
+  "keywords": [
+    "tetris",
+    "robot",
+    "beam",
+    "watchbeam",
+    "gaming"
+  ],
+  "author": "Connor Peet <connor@peet.io>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/WatchBeam/tetris-reference/issues"
+  },
+  "homepage": "https://github.com/WatchBeam/tetris-reference#readme",
+  "dependencies": {
+    "protobufjs": "^4.0.0",
+    "varint": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel": "^5.8.23",
+    "chai": "^3.2.0",
+    "eslint": "^1.4.3",
+    "istanbul": "^0.3.20",
+    "mocha": "^2.3.2",
+    "sinon": "^1.16.1"
+  }
+}
