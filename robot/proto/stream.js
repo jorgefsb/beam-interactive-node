@@ -94,11 +94,14 @@ export class Decoder extends Writable {
             return bytes;
         }
 
+        let decoded;
         try {
-            this.emit('message', ident.obj.decode(buffer.slice(bytes - length, bytes)));
+            decoded = ident.obj.decode(buffer.slice(bytes - length, bytes))
         } catch (e) {
             this.emit('error', e.decoded ? new DecodeError(e) : e);
         }
+
+        if (decoded) this.emit('message', decoded);
 
         return bytes;
     }
