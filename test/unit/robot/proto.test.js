@@ -1,6 +1,6 @@
 const Readable = require('stream').Readable;
-const Stream = require('../../robot/proto/stream');
-const Packets = require('../../robot/proto/packets');
+const Stream = require('../../../lib/robot/proto/stream');
+const Packets = require('../../../lib/robot/proto/packets');
 const expect = require('chai').expect;
 const varint = require('varint');
 

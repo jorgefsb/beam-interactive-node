@@ -1,4 +1,4 @@
-import Robot from '../../robot/robot';
+import Robot from '../../lib/robot';
 import {expect} from 'chai';
 import async from 'async';
 import {setGamerKey, setGame} from './util';
