@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import async from 'async';
 import {setGamerKey, setGame} from './util';
 
-describe('handshake', () => {
+describe('backend', () => {
     let robot;
 
     beforeEach(function (done) {
@@ -18,7 +18,7 @@ describe('handshake', () => {
     });
 
     it('handshakes when valid', function (done) {
-        robot = new Robot('127.0.0.1:3442', 42, 'asdf');
+        robot = new Robot({ remote: '127.0.0.1:3442', channel: 42, key: 'asdf' });
         robot.handshake((err) => {
             expect(err).to.be.undefined;
             done();
@@ -26,7 +26,7 @@ describe('handshake', () => {
     });
 
     it('fails when invalid', function (done) {
-        robot = new Robot('127.0.0.1:3442', 42, 'asdfasdfsdfsd');
+        robot = new Robot({ remote: '127.0.0.1:3442', channel: 42, key: 'asdfasdfsdfsd' });
         robot.handshake((err) => {
             expect(err).to.be.defined;
             expect(err.message).to.equal('Invalid channel ID or key.')
@@ -36,7 +36,7 @@ describe('handshake', () => {
 
     describe('functionality', function () {
         beforeEach(function (done) {
-            robot = new Robot('127.0.0.1:3442', 42, 'asdf');
+            robot = new Robot({ remote: '127.0.0.1:3442', channel: 42, key: 'asdf' });
             robot.handshake((err) => {
                 expect(err).to.be.undefined;
                 done();

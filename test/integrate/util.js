@@ -47,7 +47,7 @@ export function connectRobot(callback) {
     ], (err) => {
         if (err) return callback(err);
 
-        const robot = new Robot('127.0.0.1:3442', 42, 'asdf');
+        const robot = new Robot({ remote: '127.0.0.1:3442', channel: 42, key: 'asdf' });
         robot.handshake((err) => callback(err, robot));
     });
 }

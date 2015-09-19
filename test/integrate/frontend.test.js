@@ -3,7 +3,7 @@ import {expect} from 'chai';
 import async from 'async';
 import {setPlayerKey, connectRobot} from './util';
 
-describe('handshake', () => {
+describe('frontend', () => {
     let robot;
     let frontend;
     let options;
