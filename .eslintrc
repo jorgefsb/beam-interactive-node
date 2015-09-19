@@ -19,7 +19,8 @@
     "spread": true,
     "superInFunctions": true,
     "templateStrings": true,
-    "jsx": true
+    "jsx": true,
+    "restParams": true
   },
   "rules": {
 /**
