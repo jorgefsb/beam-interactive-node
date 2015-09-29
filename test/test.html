@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Websocket Test</title>
+</head>
+<body>
+    <script src="../dist/bundle.js"></script>
+    <script>
+    var Tetris = require('tetris');
+    var tetris = new Tetris({
+        remote: 'ws://127.0.0.1:3443',
+        channel: 42,
+        user: 13,
+        key: 'asdf'
+    });
+
+    tetris.handshake(function (err) {
+        console.log(err);
+    });
+    </script>
+</body>
+</html>
