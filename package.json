@@ -1,6 +1,6 @@
 {
   "name": "@mcph/tetris-reference",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "This repository contains reference a implementation of a Tetris robot.",
   "main": "index.js",
   "scripts": {
