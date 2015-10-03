@@ -68,3 +68,36 @@ message Report {
 message Error {
     required string message = 1;
 }
+
+// A ProgressUpdate message may be sent up periodically from the Robot. It
+// contains an array of objects to update the multiple controls on the fe.
+message ProgressUpdate {
+    message Progress {
+        enum TargetType {
+            TACTILE = 0;
+            JOYSTICK = 1;
+        }
+
+        // The type of control this targets.
+        required TargetType target = 1;
+
+        // The code for the control target. For tactile controls, this will be
+        // the `key` code. For joystick controls, this will be the `axis`.
+        required uint32 code = 2;
+
+        // The progress this input as towards some threshold, designated by the
+        // robot. This must be a float value in the range [0, 1).
+        optional float progress = 3;
+
+        // The duration, in milliseconds, before the action effected by this input
+        // may be carried out again. Note that this will decrement automatically
+        // on the frontend and does not need continuous updates.
+        optional uint32 cooldown = 4;
+
+        // Denotes that the action effected by this control has
+        // occurred, showing a "pulse" on the input.
+        optional bool fired = 5;
+    }
+
+    repeated Progress progress = 1;
+}
