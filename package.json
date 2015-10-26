@@ -1,7 +1,7 @@
 {
-  "name": "@mcph/tetris-reference",
-  "version": "0.0.5",
-  "description": "This repository contains reference a implementation of a Tetris robot.",
+  "name": "beam-interactive-node",
+  "version": "0.0.1",
+  "description": "This repository contains reference a implementation of a Beam Interactive robot.",
   "main": "index.js",
   "scripts": {
     "lint": "eslint lib",
@@ -14,7 +14,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/WatchBeam/tetris-reference.git"
+    "url": "git+https://github.com/WatchBeam/beam-interactive-node.git"
   },
   "keywords": [
     "tetris",
@@ -26,9 +26,9 @@
   "author": "Connor Peet <connor@peet.io>",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/WatchBeam/tetris-reference/issues"
+    "url": "https://github.com/WatchBeam/beam-interactive-node/issues"
   },
-  "homepage": "https://github.com/WatchBeam/tetris-reference#readme",
+  "homepage": "https://github.com/WatchBeam/beam-interactive-node#readme",
   "dependencies": {
     "protobufjs": "^4.0.0",
     "varint": "^4.0.0",
