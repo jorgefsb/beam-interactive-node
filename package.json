@@ -10,7 +10,8 @@
     "testfe": "browserify -r ./dist/frontend:tetris > dist/bundle.js && http-server",
     "integrate": "mocha test/integrate --recursive --compilers js:babel/register",
     "prepublish": "npm run lint && npm run build",
-    "cover": "node node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- test/unit --recursive --compilers js:babel/register"
+    "cover": "node node_modules/istanbul/lib/cli cover node_modules/mocha/bin/_mocha -- test/unit --recursive --compilers js:babel/register",
+    "pages": "cd doc && make html && cd ../ && mv doc/_build/html .tmpdoc && git checkout gh-pages && rm -rf _images _sources _static *.html *.js && mv .tmpdoc/* . && rm -rf .tmpdoc && git add ."
   },
   "repository": {
     "type": "git",
