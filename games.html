@@ -1,0 +1,291 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>Games &mdash; Beam Interactive 1.0.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '1.0.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="Beam Interactive 1.0.0 documentation" href="index.html" />
+    <link rel="next" title="Talking to Beam Interactive" href="talking.html" />
+    <link rel="prev" title="Build a Robot in 10 Minutes" href="tutorial.html" />
+   
+  
+  <meta name="viewport" content="width=device-width, initial-scale=0.9, maximum-scale=0.9">
+
+  </head>
+  <body role="document">
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="talking.html" title="Talking to Beam Interactive"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="tutorial.html" title="Build a Robot in 10 Minutes"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">Beam Interactive 1.0.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="games">
+<h1>Games<a class="headerlink" href="#games" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="schema">
+<h2>Schema<a class="headerlink" href="#schema" title="Permalink to this headline">¶</a></h2>
+<p>Being relatively static resources, games are stored in SQL. The schema which tetrisd requires is as follows:</p>
+<div class="highlight-sql"><div class="highlight"><pre><span class="k">CREATE</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">tetris_games</span><span class="o">`</span> <span class="p">(</span>
+  <span class="o">`</span><span class="n">id</span><span class="o">`</span> <span class="nb">int</span><span class="p">(</span><span class="mi">11</span><span class="p">)</span> <span class="n">unsigned</span> <span class="k">NOT</span> <span class="k">NULL</span> <span class="n">AUTO_INCREMENT</span><span class="p">,</span>
+  <span class="o">`</span><span class="n">controls</span><span class="o">`</span> <span class="nb">text</span> <span class="k">NOT</span> <span class="k">NULL</span><span class="p">,</span>
+  <span class="k">PRIMARY</span> <span class="k">KEY</span> <span class="p">(</span><span class="o">`</span><span class="n">id</span><span class="o">`</span><span class="p">)</span>
+<span class="p">)</span> <span class="n">ENGINE</span><span class="o">=</span><span class="n">InnoDB</span> <span class="k">DEFAULT</span> <span class="n">CHARSET</span><span class="o">=</span><span class="n">utf8</span><span class="p">;</span>
+</pre></div>
+</div>
+<p>There may be other columns added, but these two are all that Tetris needs. The <code class="docutils literal"><span class="pre">controls</span></code> columns should be a JSON-encoded controls object, as described below.</p>
+</div>
+<div class="section" id="the-controls-object">
+<h2>The Controls Object<a class="headerlink" href="#the-controls-object" title="Permalink to this headline">¶</a></h2>
+<p id="controls">In Go, the controls struct could be represented as:</p>
+<div class="highlight-go"><div class="highlight"><pre><span class="kd">type</span> <span class="nx">Controls</span> <span class="kd">struct</span> <span class="p">{</span>
+    <span class="nx">ReportInterval</span> <span class="kt">uint</span>
+    <span class="nx">Joystick</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+        <span class="nx">Axis</span>     <span class="kt">uint32</span>
+        <span class="nx">Analysis</span> <span class="p">[]</span><span class="kt">uint</span>
+    <span class="p">}</span>
+    <span class="nx">Tactile</span> <span class="p">[]</span><span class="kd">struct</span> <span class="p">{</span>
+        <span class="nx">Key</span>      <span class="kt">uint32</span>
+        <span class="nx">Up</span>       <span class="kt">bool</span>
+        <span class="nx">Down</span>     <span class="kt">bool</span>
+        <span class="nx">Analysis</span> <span class="p">[]</span><span class="kt">uint</span>
+
+        <span class="nx">Grid</span> <span class="kd">struct</span> <span class="p">{</span>
+            <span class="nx">URL</span>    <span class="kt">string</span>
+            <span class="nx">Help</span>   <span class="kt">string</span>
+            <span class="nx">Text</span>   <span class="kt">string</span>
+            <span class="nx">X</span>      <span class="kt">float64</span>
+            <span class="nx">Y</span>      <span class="kt">float64</span>
+            <span class="nx">Width</span>  <span class="kt">float64</span>
+            <span class="nx">Height</span> <span class="kt">float64</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="nx">Grid</span> <span class="kd">struct</span> <span class="p">{</span>
+        <span class="nx">Width</span>  <span class="kt">uint</span>
+        <span class="nx">Height</span> <span class="kt">uint</span>
+
+        <span class="nx">Joystick</span> <span class="kd">struct</span> <span class="p">{</span>
+            <span class="nx">Help</span>   <span class="kt">string</span>
+            <span class="nx">X</span>      <span class="kt">float64</span>
+            <span class="nx">Y</span>      <span class="kt">float64</span>
+            <span class="nx">Width</span>  <span class="kt">float64</span>
+            <span class="nx">Height</span> <span class="kt">float64</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p>The JSON object should be in much the same format, simply with StudlyCase converted to camelCase.</p>
+<ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">reportInterval</span></code> is the delay, in milliseconds, between reports being sent to the robot. This is the duration over which input will be gathered, before being aggregated, analyzed, and set to the robot.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">joystick</span></code> is an array of objects with properties:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">axis</span></code> is an arbitrary numeric axis ID. Tetrisd doesn&#8217;t care what the axis IDs are.</li>
+<li><code class="docutils literal"><span class="pre">help</span></code> is the help text to display for the joystick control.</li>
+<li><code class="docutils literal"><span class="pre">analysis</span></code> an <a class="reference internal" href="#analysis-list"><span>analysis list</span></a> to run on the axis.</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">tactile</span></code> is an array of objects with properties:</p>
+<blockquote>
+<div><ul>
+<li><p class="first"><code class="docutils literal"><span class="pre">key</span></code> the <a class="reference internal" href="#codes"><span>character code</span></a> for a button</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">up</span></code> whether to record key releases. (Note: this will always be zero for scroll wheel buttons.)</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">down</span></code> whether to record key presses.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">analysis</span></code> the <a class="reference internal" href="#analysis-list"><span>analysis list</span></a> to run on this button.</p>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">grid</span></code> defines information for displaying the button on the frontend.</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">url</span></code> the URL links to an image to be displayed on the button on the frontend, for custom buttons only. This is optional.</li>
+<li><code class="docutils literal"><span class="pre">text</span></code> is a short string to display on the button itself.</li>
+<li><code class="docutils literal"><span class="pre">help</span></code> specifies longer help text to display for the button.</li>
+<li><code class="docutils literal"><span class="pre">X</span></code> defines its X coordinate on the grid. It&#8217;s a floating point value, so alignment can be customized precisely. The origin is in the upper left-hand corner of the control space.</li>
+<li><code class="docutils literal"><span class="pre">Y</span></code> defines its Y coordinate on the grid. It&#8217;s a floating point value, so alignment can be customized precisely. The origin is in the upper left-hand corner of the control space.</li>
+<li><code class="docutils literal"><span class="pre">Width</span></code> defines the number of grid spaces this element is wide.</li>
+<li><code class="docutils literal"><span class="pre">Height</span></code> defines the height of the element in grid spaces.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</li>
+<li><p class="first"><code class="docutils literal"><span class="pre">grid</span></code> defines the control space on the frontend:</p>
+<blockquote>
+<div><ul class="simple">
+<li><code class="docutils literal"><span class="pre">width</span></code> is the total number of columns in the grid.</li>
+<li><code class="docutils literal"><span class="pre">height</span></code> is the total number of rows in the grid.</li>
+<li><code class="docutils literal"><span class="pre">joystick</span></code> is the grid settings for the joystick control. See the &#8220;tactile&#8221; section above for details. This may be omitted if no joystick controls are requested.</li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<div class="section" id="character-codes">
+<h3>Character Codes<a class="headerlink" href="#character-codes" title="Permalink to this headline">¶</a></h3>
+<p>Character codes are used for requesting input for Tetris games.These are standard JavaScript character codes, with the following special cases:</p>
+<ul class="simple" id="codes">
+<li><code class="docutils literal"><span class="pre">0</span></code>: left mouse button</li>
+<li><code class="docutils literal"><span class="pre">1</span></code>: right mouse button</li>
+<li><code class="docutils literal"><span class="pre">2</span></code>: center mouse button</li>
+<li><code class="docutils literal"><span class="pre">3</span></code>: scroll wheel up</li>
+<li><code class="docutils literal"><span class="pre">4</span></code>: scroll wheel down</li>
+<li><code class="docutils literal"><span class="pre">1024</span> <span class="pre">≤</span> <span class="pre">code</span> <span class="pre">&lt;</span> <span class="pre">2048</span></code>: custom button</li>
+</ul>
+</div>
+<div class="section" id="analysis-lists">
+<h3>Analysis Lists<a class="headerlink" href="#analysis-lists" title="Permalink to this headline">¶</a></h3>
+<p id="analysis-list">Analysis lists are lists of unsigned integers which express what kinds of analysis will be done and reported on.</p>
+<table border="1" class="docutils">
+<colgroup>
+<col width="18%" />
+<col width="82%" />
+</colgroup>
+<thead valign="bottom">
+<tr class="row-odd"><th class="head">ID</th>
+<th class="head">Analysis</th>
+</tr>
+</thead>
+<tbody valign="top">
+<tr class="row-even"><td>0</td>
+<td>Frequency</td>
+</tr>
+<tr class="row-odd"><td>1</td>
+<td>Mean</td>
+</tr>
+<tr class="row-even"><td>2</td>
+<td>Standard Deviation</td>
+</tr>
+<tr class="row-odd"><td>3</td>
+<td>Quartiles</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="validation-checklist">
+<h3>Validation Checklist<a class="headerlink" href="#validation-checklist" title="Permalink to this headline">¶</a></h3>
+<p>Here&#8217;s a helpful list of things to check when allowing third parties to submit control objects. Only a control object which answers &#8220;yes&#8221; to all of the following may be considered valid:</p>
+<ul class="simple">
+<li>☐ Are are there no extraneous yes?</li>
+<li>☐ Are the data types for all keys and values correct?</li>
+<li>☐ Is the report interval between 50 and 10000 milliseconds?</li>
+<li>☐ Are help texts either omitted or of reasonable length?</li>
+<li>☐ Do all &#8220;normal&#8221; buttons omit the URL property?</li>
+<li>☐ For custom buttons, do they either include the URL or Text property?</li>
+<li>☐ Are all Text properties of reasonable length and in a standard character set?</li>
+<li>☐ Are all analysis requests within the range of IDs specified above?</li>
+<li>☐ Are the number of custom buttons under a reasonable maximum?</li>
+<li>☐ Are all joystick keys axes valid?</li>
+<li>☐ Is there at a joystick or at least one tactile button requested?</li>
+<li>☐ Do the x, y, width, and height of all controls not overlap or exceed the grid bounds?</li>
+<li>☐ Are the width and height of all controls real numbers greater than or equal to 1?</li>
+<li>☐ Do all tactile buttons request analysis on key ups, key downs, or both?</li>
+<li>☐ Do all requested joystick and tactile inputs request at least one type of analysis?</li>
+</ul>
+</div>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">Games</a><ul>
+<li><a class="reference internal" href="#schema">Schema</a></li>
+<li><a class="reference internal" href="#the-controls-object">The Controls Object</a><ul>
+<li><a class="reference internal" href="#character-codes">Character Codes</a></li>
+<li><a class="reference internal" href="#analysis-lists">Analysis Lists</a></li>
+<li><a class="reference internal" href="#validation-checklist">Validation Checklist</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="tutorial.html"
+                        title="previous chapter">Build a Robot in 10 Minutes</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="talking.html"
+                        title="next chapter">Talking to Beam Interactive</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/games.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="footer">
+      &copy;2015, WatchBeam LLC.
+      
+      |
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.3.1</a>
+      &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.3</a>
+      
+      |
+      <a href="_sources/games.txt"
+          rel="nofollow">Page source</a></li>
+    </div>
+
+    
+
+    
+  </body>
+</html>
