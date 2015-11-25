@@ -19,8 +19,16 @@ describe('frontend packets', () => {
         expect(Packets.Error.decode('erro{"message":"Hello world!"}').get('message')).to.equal('Hello world!');
     });
 
-    it('encodes', () => {
-        expect(err.encode()).to.equal('erro{"message":"Hello world!"}');
+    it('encodes plain object', () => {
+        expect(new Packets.Error({ message: 'Hello world!' }).encode()).to.equal('erro{"message":"Hello world!"}');
+    });
+
+    it('encodes custom fn', () => {
+        expect(new Packets.Error({ toJSON: () => '{"foo":"bar"}' }).encode()).to.equal('erro{"foo":"bar"}');
+    });
+
+    it('encodes whatever', () => {
+        expect(new Packets.Error('wat').encode()).to.equal('errowat');
     });
 
     it('converts to json', () => {

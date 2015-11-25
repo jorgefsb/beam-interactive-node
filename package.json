@@ -30,6 +30,7 @@
   },
   "homepage": "https://github.com/WatchBeam/beam-interactive-node#readme",
   "dependencies": {
+    "lodash.isplainobject": "^3.2.0",
     "protobufjs": "^4.0.0",
     "varint": "^4.0.0",
     "ws": "^0.8.0"
