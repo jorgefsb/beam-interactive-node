@@ -1,5 +1,6 @@
 import Packets from '../../../lib/frontend/packets';
-import {expect} from 'chai';
+import {UnknownPacketError, FatalCodingError} from '../../../lib/errors';
+import {expect, assert} from 'chai';
 
 describe('frontend packets', () => {
     const report = new Packets.Report({
@@ -15,8 +16,30 @@ describe('frontend packets', () => {
 
     const err = new Packets.Error({ message: 'Hello world!' });
 
-    it('decodes', () => {
-        expect(Packets.Error.decode('erro{"message":"Hello world!"}').get('message')).to.equal('Hello world!');
+    it('decodes a single packet', () => {
+        const expected = new Packets.Error({ message: 'Hello world!' });
+        expect(Packets.Error.decode('erro{"message":"Hello world!"}')).to.deep.equal(expected);
+        expect(Packets.decode('erro{"message":"Hello world!"}')).to.deep.equal(expected);
+    });
+
+    it('throws correctly decoding an incomplete packet', () => {
+        expect(() => Packets.decode('er')).to.throw(FatalCodingError);
+    });
+
+    it('throws correctly decoding an invalid packet', () => {
+        expect(() => Packets.decode('erro{asdfsdf}')).to.throw(FatalCodingError);
+    });
+
+    it('throws correctly decoding an unknown', () => {
+        try {
+            Packets.decode('wtff{"foo":42}')
+        } catch (e) {
+            expect(e).to.be.an.instanceof(UnknownPacketError);
+            expect(e.data).to.equal('wtff{"foo":42}');
+            return;
+        }
+
+        assert.fail('decode should have thrown');
     });
 
     it('encodes plain object', () => {
