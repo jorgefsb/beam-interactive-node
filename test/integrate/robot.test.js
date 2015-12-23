@@ -18,7 +18,7 @@ describe('backend', () => {
     });
 
     it('handshakes when valid', function (done) {
-        robot = new Robot({ remote: '127.0.0.1:3442', channel: 42, key: 'asdf' });
+        robot = new Robot({ remote: 'ws://127.0.0.1:3443', channel: 42, key: 'asdf' });
         robot.handshake((err) => {
             expect(err).to.be.undefined;
             done();
@@ -26,7 +26,7 @@ describe('backend', () => {
     });
 
     it('fails when invalid', function (done) {
-        robot = new Robot({ remote: '127.0.0.1:3442', channel: 42, key: 'asdfasdfsdfsd' });
+        robot = new Robot({ remote: 'ws://127.0.0.1:3443', channel: 42, key: 'asdfasdfsdfsd' });
         robot.handshake((err) => {
             expect(err).to.be.defined;
             expect(err.message).to.equal('Invalid channel ID or key.')
@@ -36,7 +36,7 @@ describe('backend', () => {
 
     describe('functionality', function () {
         beforeEach(function (done) {
-            robot = new Robot({ remote: '127.0.0.1:3442', channel: 42, key: 'asdf' });
+            robot = new Robot({ remote: 'ws://127.0.0.1:3443', channel: 42, key: 'asdf' });
             robot.handshake((err) => {
                 expect(err).to.be.undefined;
                 done();
