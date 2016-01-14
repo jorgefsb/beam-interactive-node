@@ -93,6 +93,11 @@ message Error {
 // the Robot. It contains an array of objects to update the
 // multiple controls on the frontend.
 message ProgressUpdate {
+    // State to change to. States with the given state in their `states` array
+    // will be visible. If not passed, the state will not be changed.
+    // The default state at initialization of the robot is simply "default".
+    optional string state = 3;
+
     message JoystickUpdate {
         // The ID of the joystick control to update
         required uint32 id = 1;
