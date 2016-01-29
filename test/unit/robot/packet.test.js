@@ -23,6 +23,15 @@ describe('robot packets', () => {
         expect(() => Packets.decode(new Buffer([0xff]))).to.throw(FatalCodingError);
     });
 
+    it('includes a stack in the error', () => {
+        try {
+            Packets.decode(new Buffer([0xff]));
+        } catch (e) {
+            return expect(e.stack).to.be.a('string');
+        }
+        assert.fail('expected to catch an error');
+    });
+
     it('throws an error on malformed packet body', () => {
         expect(() => Packets.decode(new Buffer([0x03, 0x08, 0x96, 0x01]))).to.throw(FatalCodingError);
     });
