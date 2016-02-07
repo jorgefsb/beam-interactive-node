@@ -79,4 +79,34 @@ describe('reporter', () => {
             tactile: [{ id: 2, down: 4, up: 3 }, { id: 3, down: 1, up: 1 }]
         });
     });
+
+    it('fixes issue WatchBeam/frontend#889', function () {
+        reporter.add({
+            tactile: [
+                { id: 1, down: 1 },
+                { id: 2, up: 1 },
+                { id: 3, down: 1 },
+                { id: 4, up: 1 },
+            ]
+        });
+
+        reporter.add({
+            tactile: [
+                { id: 3, up: 1 },
+                { id: 4, up: 1 },
+            ]
+        });
+
+        clock.tick(51);
+        expect(mock.send.args.length).to.equal(1);
+        expect(mock.send.args[0][0].props).to.deep.equal({
+            joystick: [],
+            tactile: [
+                { id: 1, down: 1 },
+                { id: 2, up: 1 },
+                { id: 3, down: 1, up: 1 },
+                { id: 4, up: 2, down: 0 },
+            ]
+        });
+    });
 });
