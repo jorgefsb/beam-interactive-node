@@ -78,7 +78,7 @@ message Report {
         required uint32 id = 1;
 
         // The number of clicks users made this analysis cycle.
-        optional uint32 clicks = 2;
+        optional double clicks = 2;
         // Coordinate analysis if requested, in the range [0, 1]. The
         // upper-left corner of the screen is (0, 0), and the lower right
         // corner is (1, 1).
