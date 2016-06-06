@@ -1,4 +1,5 @@
 import Heartbeats from '../../lib/heartbeats';
+import { PingTimeoutError } from '../../lib/errors';
 import { EventEmitter } from 'events';
 import { expect } from 'chai';
 import sinon from 'sinon'
@@ -31,11 +32,16 @@ describe('heartbeats', () => {
     });
 
     it('closes the socket without a response after a timeout', () => {
+        let err = null;
+        socket.once('error', (e) => { err = e });
+
         expect(socket.close.called).to.be.false;
         clock.tick(119);
         expect(socket.close.called).to.be.false;
+        expect(err).to.be.null;
         clock.tick(2);
         expect(socket.close.called).to.be.true;
+        expect(err).to.be.an.instanceof(PingTimeoutError);
     });
 
     it('updates the time when touched', () => {
