@@ -1,14 +1,13 @@
 import Frontend from '../../lib/frontend';
-import {expect} from 'chai';
-import async from 'async';
-import {setPlayerKey, connectRobot} from './util';
+import { expect } from 'chai';
+import { setPlayerKey, connectRobot } from './util';
 
 describe('frontend', () => {
     let robot;
     let frontend;
     let options;
 
-    before(function (done) {
+    before(done => {
         connectRobot((err, r) => {
             robot = r;
             done(err);
@@ -20,7 +19,7 @@ describe('frontend', () => {
             remote: 'ws://127.0.0.1:3443',
             channel: 42,
             user: 13,
-            key: 'asdf'
+            key: 'asdf',
         };
         setPlayerKey(13, 'asdf', 1, done);
     });
@@ -29,11 +28,11 @@ describe('frontend', () => {
         frontend.close();
     });
 
-    after(function () {
+    after(() => {
         robot.close();
     });
 
-    it('works when connecting to an online stream', function (done) {
+    it('works when connecting to an online stream', done => {
         frontend = new Frontend(options);
         frontend.handshake((err) => {
             expect(err).to.be.undefined;
@@ -41,7 +40,7 @@ describe('frontend', () => {
         });
     });
 
-    it('fails connecting to an offline stream', function (done) {
+    it('fails connecting to an offline stream', done => {
         options.channel = 666;
         frontend = new Frontend(options);
         frontend.handshake((err) => {
