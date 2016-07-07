@@ -1,1 +1,7 @@
 /test
+/lib
+.eslintrc
+.babelrc
+.travis.yml
+.editorconfig
+.eslintignore
