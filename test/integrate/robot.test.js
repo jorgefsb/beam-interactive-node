@@ -18,17 +18,17 @@ describe('backend', () => {
         robot.close();
     });
 
-    it('handshakes when valid', (done) => {
+    it('handshakes when valid', done => {
         robot = new Robot(robotOpts);
-        robot.handshake((err) => {
+        robot.handshake(err => {
             expect(err).to.be.undefined;
             done();
         });
     });
 
-    it('fails when invalid', (done) => {
+    it('fails when invalid', done => {
         robot = new Robot(Object.assign({}, robotOpts, { key: 'asdfasdfsdfsd' }));
-        robot.handshake((err) => {
+        robot.handshake(err => {
             expect(err).to.be.defined;
             expect(err.message).to.equal('Invalid channel ID or key.');
             done();
@@ -36,16 +36,16 @@ describe('backend', () => {
     });
 
     describe('functionality', () => {
-        beforeEach((done) => {
+        beforeEach(done => {
             robot = new Robot(robotOpts);
-            robot.handshake((err) => {
+            robot.handshake(err => {
                 expect(err).to.be.undefined;
                 done();
             });
         });
 
-        it('gets reports', (done) => {
-            robot.on('report', (report) => {
+        it('gets reports', done => {
+            robot.on('report', report => {
                 expect(report).to.containSubset({
                     quorum: 0,
                     connected: 0,

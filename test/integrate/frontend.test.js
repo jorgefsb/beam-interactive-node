@@ -14,7 +14,7 @@ describe('frontend', () => {
         });
     });
 
-    beforeEach((done) => {
+    beforeEach(done => {
         options = {
             remote: 'ws://127.0.0.1:3443',
             channel: 42,
@@ -34,7 +34,7 @@ describe('frontend', () => {
 
     it('works when connecting to an online stream', done => {
         frontend = new Frontend(options);
-        frontend.handshake((err) => {
+        frontend.handshake(err => {
             expect(err).to.be.undefined;
             done();
         });
@@ -43,7 +43,7 @@ describe('frontend', () => {
     it('fails connecting to an offline stream', done => {
         options.channel = 666;
         frontend = new Frontend(options);
-        frontend.handshake((err) => {
+        frontend.handshake(err => {
             expect(err).to.be.defined;
             done();
         });

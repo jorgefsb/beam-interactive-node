@@ -44,7 +44,7 @@ export function connectRobot(callback) {
     async.parallel([
         async.apply(setGamerKey, 42, 'asdf', 3),
         async.apply(setGame, 3, { reportInterval: 100 }),
-    ], (err) => {
+    ], err => {
         if (err) return callback(err);
 
         const robot = new Robot({
