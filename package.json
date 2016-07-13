@@ -34,7 +34,7 @@
     "lodash.isplainobject": "^4.0.1",
     "protobufjs": "^4.0.0",
     "varint": "^4.0.0",
-    "ws": "^0.8.0"
+    "ws": "^1.1.1"
   },
   "devDependencies": {
     "async": "^2.0.0",
