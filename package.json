@@ -37,7 +37,7 @@
     "ws": "^0.8.0"
   },
   "devDependencies": {
-    "async": "^1.4.2",
+    "async": "^2.0.0",
     "babel-cli": "^6.8.0",
     "babel-preset-es2015": "^6.5.0",
     "babel-register": "^6.5.2",
