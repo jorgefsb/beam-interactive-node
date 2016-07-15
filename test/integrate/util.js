@@ -15,18 +15,18 @@ const cMysql = mysql.createConnection({
 });
 
 export function setGamerKey(id, key, game, callback) {
-    cRedis.hmset('tetrisd:gamekey:' + id + ':' + key, 'game', game, callback);
+    cRedis.hmset(`tetrisd:gamekey:${id}:${key}`, 'game', game, callback);
 }
 
 export function setPlayerKey(id, key, influence, callback) {
-    cRedis.hmset('tetrisd:playkey:' + id + ':' + key,
+    cRedis.hmset(`tetrisd:playkey:${id}:${key}`,
         'influence', influence,
         callback
     );
 }
 
 export function setGame(id, controls, callback) {
-    cMysql.query('delete from tetris_game_version where id = ?', id, function (err) {
+    cMysql.query('delete from tetris_game_version where id = ?', id, err => {
         if (err) return callback(err);
 
         cMysql.query(
@@ -44,16 +44,16 @@ export function connectRobot(callback) {
     async.parallel([
         async.apply(setGamerKey, 42, 'asdf', 3),
         async.apply(setGame, 3, { reportInterval: 100 }),
-    ], (err) => {
+    ], err => {
         if (err) return callback(err);
 
         const robot = new Robot({
             remote: 'ws://127.0.0.1:3443',
             channel: 42,
             key: 'asdf',
-            debug: true
+            debug: true,
         });
 
-        robot.handshake((err) => callback(err, robot));
+        robot.handshake(robotError => callback(robotError, robot));
     });
 }

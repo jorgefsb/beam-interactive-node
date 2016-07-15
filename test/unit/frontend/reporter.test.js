@@ -1,5 +1,5 @@
 import Reporter from '../../../lib/frontend/reporter';
-import {expect} from 'chai';
+import { expect } from 'chai';
 import sinon from 'sinon';
 
 
@@ -16,7 +16,7 @@ describe('reporter', () => {
 
     afterEach(() => {
         clock.restore();
-    })
+    });
 
     it('sends correctly', () => {
         const c1 = sinon.stub();
@@ -60,21 +60,21 @@ describe('reporter', () => {
         });
     });
 
-    it('fixes issue WatchBeam/frontend#889', function () {
+    it('fixes issue WatchBeam/frontend#889', () => {
         reporter.add({
             tactile: [
                 { id: 1, down: 1 },
                 { id: 2, up: 1 },
                 { id: 3, down: 1 },
                 { id: 4, up: 1 },
-            ]
+            ],
         });
 
         reporter.add({
             tactile: [
                 { id: 3, up: 1 },
                 { id: 4, up: 1 },
-            ]
+            ],
         });
 
         clock.tick(51);

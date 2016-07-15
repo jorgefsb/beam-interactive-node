@@ -35,3 +35,6 @@ npm-debug.log
 
 /dist
 /doc/_build
+
+*.sublime-project
+*.sublime-workspace

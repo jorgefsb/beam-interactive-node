@@ -1,6 +1,6 @@
 import Packets from '../../../lib/frontend/packets';
-import {UnknownPacketError, FatalCodingError} from '../../../lib/errors';
-import {expect, assert} from 'chai';
+import { UnknownPacketError, FatalCodingError } from '../../../lib/errors';
+import { expect, assert } from 'chai';
 
 describe('frontend packets', () => {
     const report = new Packets.Report({
@@ -11,7 +11,7 @@ describe('frontend packets', () => {
         tactile: [
             { key: 0, down: 1 },
             { key: 38, down: 2, up: 1 },
-        ]
+        ],
     });
 
     const err = new Packets.Error({ message: 'Hello world!' });
@@ -32,7 +32,7 @@ describe('frontend packets', () => {
 
     it('throws correctly decoding an unknown', () => {
         try {
-            Packets.decode('wtff{"foo":42}')
+            Packets.decode('wtff{"foo":42}');
         } catch (e) {
             expect(e).to.be.an.instanceof(UnknownPacketError);
             expect(e.data).to.equal('wtff{"foo":42}');
@@ -43,11 +43,13 @@ describe('frontend packets', () => {
     });
 
     it('encodes plain object', () => {
-        expect(new Packets.Error({ message: 'Hello world!' }).encode()).to.equal('erro{"message":"Hello world!"}');
+        expect(new Packets.Error({ message: 'Hello world!' }).encode())
+        .to.equal('erro{"message":"Hello world!"}');
     });
 
     it('encodes custom fn', () => {
-        expect(new Packets.Error({ toJSON: () => '{"foo":"bar"}' }).encode()).to.equal('erro{"foo":"bar"}');
+        expect(new Packets.Error({ toJSON: () => '{"foo":"bar"}' }).encode())
+        .to.equal('erro{"foo":"bar"}');
     });
 
     it('encodes whatever', () => {
@@ -59,12 +61,12 @@ describe('frontend packets', () => {
     });
 
     it('converts to plain object', () => {
-        expect(err.toObject()).to.deep.equal({ message: "Hello world!" });
+        expect(err.toObject()).to.deep.equal({ message: 'Hello world!' });
     });
 
     it('gets attributes', () => {
         expect(report.get('tactile')).to.deep.equal(report.props.tactile);
         expect(report.get('tactile.0.down')).to.equal(1);
         expect(report.get('tactile.a.b')).to.be.undefined;
-    })
+    });
 });
