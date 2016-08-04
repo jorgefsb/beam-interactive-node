@@ -1,6 +1,6 @@
 {
   "name": "beam-interactive-node",
-  "version": "0.3.1",
+  "version": "0.3.2",
   "description": "This repository contains reference a implementation of a Beam Interactive robot.",
   "main": "index.js",
   "scripts": {
